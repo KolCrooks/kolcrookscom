@@ -11,7 +11,7 @@ const config = {
 	},
 
     preprocess: [mdsvex()],
-    extensions: [".svelte", ".svx"]
+    extensions: [".svelte", ".svx"],
 };
 
 export default config;
