@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+    import { base } from '$app/paths';
 
 	let cursorImg: HTMLImageElement;
 
@@ -15,20 +16,30 @@
         ]);
     let n_sounds = [0,1,2,3,4,5];
 
+
+
+    let pos = $state({x: 0, y: 0});
+    let offset = $state(0);
+    let offset_rounded = $derived(Math.round(offset));
+    let ak_angle = $state(0);
+
+    $effect(() => {
+        setInterval(() => {
+            offset *= 0.9;
+            if (offset < 0.5) {
+                offset = 0;
+            }
+        }, 10);
+    });
+
     
 	onMount(() => {
         let last_used = 0;
 		const handleMouseMove = (event: MouseEvent) => {
-			cursorImg.style.left = `${event.clientX}px`;
-			cursorImg.style.top = `${event.clientY}px`;
-
-			// angle from bottom right corner to top left of ak
-			const angle =
-				(Math.atan2(window.innerHeight - event.clientY, window.innerWidth - event.clientX) * 180) /
-				Math.PI * 0.1;
-
-			akGun.style.transform = `skew(-${angle}deg)`;
+			pos = { x: event.clientX, y: event.clientY };
+            ak_angle = (pos.x / window.innerWidth * 20 - 20) * -1;
 		};
+
 
 		const handleMouseDown = (event: MouseEvent) => {
             if (!(event.target as HTMLElement).closest('.canvas')) {
@@ -40,6 +51,7 @@
 			akSounds[i].pause();
 			akSounds[i].currentTime = 0.1;
 			akSounds[i].play();
+            offset += 10;
 		};
 
 		window.addEventListener('mousedown', handleMouseDown);
@@ -53,14 +65,16 @@
 	});
 </script>
 
-<div class="follow-cursor" bind:this={cursorImg}>
-	<img src="/cursor.png" alt="" />
+<div class="follow-cursor" style="top: {pos.y-offset_rounded}px; left: {pos.x}px" bind:this={cursorImg}>
+	<img src="{base}/cursor.png" alt="" />
 </div>
-
-<img src="/pics/V_ak47.webp" bind:this={akGun} class="ak" alt="ak" />
+<div >
+    <!-- <img class="relative" src="{base}/pics/muzzle-flash.webp" alt="ak-flash" /> -->
+</div>
+<img style="transform: skew({ak_angle}deg)" class="ak" src="{base}/pics/V_ak47.webp" alt="ak" />
 
 {#each n_sounds as i}
-    <audio src={`/sound/ak_sound.mp3`} volume={0.4} bind:this={akSounds[i]}></audio>
+    <audio src="{base}/sound/ak_sound.mp3" volume={0.3} bind:this={akSounds[i]}></audio>
 {/each}
 
 <style>
@@ -75,6 +89,10 @@
 		width: 3rem;
         user-select: none;
 	}
+
+    .ak-flash {
+
+    }
 
 	.ak {
 		position: fixed;

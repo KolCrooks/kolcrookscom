@@ -4,14 +4,19 @@ Command: npx @threlte/gltf@3.0.0 /Users/kolcrooks/Downloads/crate.glb
 -->
 
 <script>
-	import { T } from '@threlte/core';
-	import { useGltf, PositionalAudio } from '@threlte/extras';
+	import { T, useCamera } from '@threlte/core';
+	import { useGltf, PositionalAudio, interactivity, useInteractivity } from '@threlte/extras';
 	import { AutoColliders, Collider, RigidBody } from '@threlte/rapier';
 	import { clamp } from 'three/src/math/MathUtils.js';
+  import { base } from '$app/paths';
 
 	let { fallback, error, children, ref = $bindable(), ...props } = $props();
 
-	const gltf = useGltf('/model/crate.glb');
+  let self_rigid_body = $state();
+
+  interactivity();
+  
+	const gltf = useGltf(`${base}/model/crate.glb`);
 
   let audios = $state([new Audio(), new Audio(), new Audio(), new Audio(), new Audio(), new Audio()]);
 
@@ -21,9 +26,28 @@ Command: npx @threlte/gltf@3.0.0 /Users/kolcrooks/Downloads/crate.glb
     audio?.play?.()
   }
 
+  const shotBox = () => {
+    let force = 1;
+    let box_pos = self_rigid_body.translation();
+    let cam_pos = camera.current.position;
+
+    // propel the box away from the camera
+
+    let diff_x = box_pos.x - cam_pos.x;
+    let diff_y = box_pos.y - cam_pos.y;
+    let diff_z = box_pos.z - cam_pos.z;
+
+    let mag = Math.sqrt(diff_x * diff_x + diff_y * diff_y + diff_z * diff_z);
+
+    let norm_x = diff_x / mag;
+    let norm_y = diff_y / mag;
+    let norm_z = diff_z / mag;
+
+    self_rigid_body.applyImpulse({x: norm_x * force, y: norm_y * force, z: norm_z * force}, true);
+
+  }
+
   let audio_is = [0,1,2,3,4,5];
-
-
 </script>
 
 <T.Group bind:ref dispose={false} {...props}>
@@ -31,20 +55,31 @@ Command: npx @threlte/gltf@3.0.0 /Users/kolcrooks/Downloads/crate.glb
 		{@render fallback?.()}
 	{:then gltf}
 		<T.Group rotation={[-Math.PI / 2, 0, 0]} scale={0.18}>
-			<RigidBody type={'dynamic'}  oncollisionenter={fireSound}>
+			<RigidBody bind:rigidBody={self_rigid_body} type={'dynamic'} oncollisionenter={fireSound}>
         {#each audio_is as i}
           <PositionalAudio
           autoplay={false}
           bind:ref={audios[i]}
-          src={`/sound/flesh_impact_hard${i + 1}.wav`}
+          src={`${base}/sound/flesh_impact_hard${i + 1}.wav`}
         />
         {/each}
 
       
 				<AutoColliders contactForceEventThreshold={30} restitution={1} shape={'cuboid'}>
 					<T.Mesh
-						geometry={gltf.nodes.Object_3.geometry}
-						material={gltf.materials.initialShadingGroup}
+          geometry={gltf.nodes.Object_3.geometry}
+          material={gltf.materials.initialShadingGroup}
+          onclick={(event) => {
+            let force = 0.5;
+            
+            let dir_vec = {
+              x: event.ray.direction.x * force,
+              y: event.ray.direction.y * force,
+              z: event.ray.direction.z * force
+            }
+
+            self_rigid_body.applyImpulseAtPoint(dir_vec, event.intersections[0].point, true);
+          }}
 					/>
 				</AutoColliders>
 			</RigidBody>

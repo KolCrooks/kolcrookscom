@@ -1,6 +1,7 @@
 <script>
 	import Cursor from '$lib/cursor.svelte';
 	import Scene from '$lib/scene.svelte';
+    import { base } from '$app/paths';
 
 	import { Canvas } from '@threlte/core';
 
@@ -41,7 +42,7 @@
     <hr class="cs-hr" />
     <div>
         <div class="p-1 flex flex-wrap">
-            <img src="/pics/farm_colony/IMG_0987.JPG" alt="farm colony" />
+            <img src="{base}/pics/farm_colony/IMG_0987.JPG" alt="farm colony" />
             <div class="bg-black/50 grow min-w-fit ml-1 mr-1">
                 <div class="text-3xl m-2">
                     Recent Activities <button
@@ -72,7 +73,6 @@
                 <div class="text-xl">
                     <ul class="list-disc">
                         <li class="ml-6">I'm currently at <a class="hover:underline text-blue-100" href="https://www.datadoghq.com/">Datadog</a></li>
-                        <li class="ml-6">I used to do freelance work for <a class="hover:underline text-blue-100" href="https://www.hashbot.io/">Hashbot.io</a></li>
                         <li class="ml-6 "><a class="hover:underline text-blue-100" href="https://github.com/kolcrooks">Heres my github</a></li>
                     </ul>
                 </div>
@@ -88,13 +88,14 @@
         </Canvas>
     </div>
 </div>
-<audio src="/sound/button.wav" bind:this={audio}></audio>
-<div class="absolute top-0 left-0 w-full h-full flex flex-wrap justify-center items-center -z-10">
+<audio src="{base}/sound/button.wav" bind:this={audio}></audio>
+<div class="absolute overflow-x-clip top-0 left-0 w-full h-full flex flex-wrap justify-center items-center -z-10">
     {#each images as image, index}
         <img 
-            src={`/pics/farm_colony/${image}`} 
+            src={`${base}/pics/farm_colony/${image}`} 
             alt={`farm colony ${index}`} 
-            style={`position: absolute; top: ${seededRandom(index) * 200}%; left: ${seededRandom(index + images.length) * 100}%; transform: translate(-50%, -50%);`} 
+            class="absolute select-none"
+            style={`top: ${seededRandom(index) * 200}%; left: ${seededRandom(index + images.length) * 100}%; transform: translate(-50%, -50%);`} 
         />
     {/each}
 </div>

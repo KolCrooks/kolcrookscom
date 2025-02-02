@@ -9,13 +9,14 @@ Command: npx @threlte/gltf@3.0.0 static/barrel.glb --transform
   import { interactivity } from '@threlte/extras';
 	import { Attractor, AutoColliders, RigidBody, useRapier } from '@threlte/rapier';
 	import { clamp } from 'three/src/math/MathUtils.js';
+  import { base } from '$app/paths';
   
   let { fallback, error, children, ref = $bindable(), on_done, ...props } = $props()
   let { rigidBodyObjects } = useRapier();
 
   
   interactivity();
-  const gltf = useGltf('/model/barrel.glb');
+  const gltf = useGltf(`${base}/model/barrel.glb`);
   
   let exploded = $state(false)
   let audio = $state(new Audio());
@@ -64,9 +65,9 @@ Command: npx @threlte/gltf@3.0.0 static/barrel.glb --transform
       <RigidBody bind:rigidBody={self_rigid_body} type={exploded ? 'fixed' : 'dynamic'}>
         <PositionalAudio
           autoplay={false}
-          volume={2}
+          volume={3}
           bind:ref={audio}
-          src="/sound/explode_1.wav"
+          src="{base}/sound/explode_1.wav"
         />
         <AutoColliders shape={'convexHull'}>
           <T.Mesh
@@ -74,7 +75,7 @@ Command: npx @threlte/gltf@3.0.0 static/barrel.glb --transform
             material={gltf.materials['Scene_-_Root']}
             scale={[0.5, 0.5, 0.8]}
             visible={!exploded}
-            onclick={() => {
+            onclick={(event) => {
               explode();
             }}
           />
@@ -82,7 +83,7 @@ Command: npx @threlte/gltf@3.0.0 static/barrel.glb --transform
         {#if exploded}
           <Billboard>
             <T.Mesh rotation={[0, 0, Math.PI / 2]} scale={[5, 5, 5]}>
-              <AnimatedSpriteMaterial textureUrl="/texture/explosion-sheet.png" totalFrames={45} onend={()=>on_done()} loop={false} />
+              <AnimatedSpriteMaterial textureUrl="{base}/texture/explosion-sheet.png" totalFrames={45} onend={()=>on_done()} loop={false} />
               <T.PlaneGeometry />
             </T.Mesh>
           </Billboard>
