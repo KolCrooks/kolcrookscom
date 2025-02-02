@@ -22,6 +22,7 @@
     let offset = $state(0);
     let offset_rounded = $derived(Math.round(offset));
     let ak_angle = $state(0);
+    let show_flash = $state(0);
 
     $effect(() => {
         setInterval(() => {
@@ -29,6 +30,10 @@
             if (offset < 0.5) {
                 offset = 0;
             }
+            if (show_flash > 0) {
+                show_flash--;
+            }
+            
         }, 10);
     });
 
@@ -45,6 +50,7 @@
             if (!(event.target as HTMLElement).closest('.canvas')) {
                 return;
             }
+            show_flash = 10;
             last_used++;
             let i = last_used % akSounds.length;
             last_used = i;
@@ -68,10 +74,10 @@
 <div class="follow-cursor" style="top: {pos.y-offset_rounded}px; left: {pos.x}px" bind:this={cursorImg}>
 	<img src="{base}/cursor.png" alt="" />
 </div>
-<div >
-    <!-- <img class="relative" src="{base}/pics/muzzle-flash.webp" alt="ak-flash" /> -->
+<div class="ak" style="transform: skew({ak_angle}deg)">
+    <img class="relative ak-flash" style={show_flash ? "" : "display: none"} src="{base}/pics/muzzle-flash.webp" alt="ak-flash" />
+    <img class="relative" src="{base}/pics/V_ak47.webp" alt="ak" />
 </div>
-<img style="transform: skew({ak_angle}deg)" class="ak" src="{base}/pics/V_ak47.webp" alt="ak" />
 
 {#each n_sounds as i}
     <audio src="{base}/sound/ak_sound.mp3" volume={0.3} bind:this={akSounds[i]}></audio>
@@ -91,7 +97,7 @@
 	}
 
     .ak-flash {
-
+        transform: translate(-33%,59%);
     }
 
 	.ak {
@@ -99,7 +105,6 @@
 		bottom: 0;
 		right: 0;
 		width: 30%;
-		transform: translate(30%, 30%);
 		transform-origin: 50% 50%;
 		pointer-events: none;
         user-select: none;
