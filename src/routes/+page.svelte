@@ -56,11 +56,10 @@
                             add_fun();
                         }}>Click me</button
                         >
-                        <form action="/blog">
+                        <form action="{base}/blog">
                             <button
                                 class="cs-btn float-end z-20 relative cursor-none mx-2"
                                 type="submit"
-                                href=""
                             >
                                 Blog
                             </button>
