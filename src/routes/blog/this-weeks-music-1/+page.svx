@@ -4,7 +4,7 @@ layout: blog
 
 ## A note before the post
 
-Bit of an aside here before I start the post. This is my first post and I don't really have strong goals for where I want the blog as a whole to go. It is likely going to be a collection of thoughts on whatever I'm interested in at the time. Its not always going to be about music, but this week it is.
+Bit of an aside here before I start the post. I don't really have strong goals for where I want the blog as a whole to go. It'll likely be a collection of thoughts on whatever I'm interested in at the time and while it isn't always going to be about music, this week is.
 
 
 # This Weeks Music
@@ -15,9 +15,9 @@ Bit of an aside here before I start the post. This is my first post and I don't 
     <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/7aKQNWCBsxQcyTgrxDuOvj?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 </div>
 
-This is a pretty cool album that I ran into while going down a rabbit hole of related artists. It has a vibe that is very much "kol" so i guess it isn't a surprise that I like it. Its hard to really place the genre of the album but I would maybe label it as indie electronic? Honestly it's hard to place, but I guess thats why labeling things isn't always great.
+This is a pretty cool album that I ran into while clicking through related artists. The first song has a vibe thats very much "kol" so it captured my attention immediately. Its hard to really place the genre of it, but I would maybe label the album as indie electronic? Honestly it's hard to say, but I guess thats why labeling things isn't always great.
 
-I thoroughly enjoyed this album, and have found myself playing it on repeat for most of the week. I'm not sure what bbpue's influences are but at times, they remind me of Alex G and LCD Soundsystem. Despite this, I think that it stands strongly on its own. Its production is simple and raw, but in that rawness there is beauty. More than anything i've heard in recent times, it has inspired me to make music again.
+I thoroughly enjoyed this album, and have found myself playing it on repeat for most of the week. Its catchy and familiar, but still fairly unique. At times the album reminds me of Alex G and LCD Soundsystem but It still stands on its own. Its production is simple and raw, but in that rawness there is beauty. More than anything i've heard in recent times, it has inspired me to make music again.
 
 <br class="my-4 block clear-left">
 
@@ -50,4 +50,4 @@ There is something about this track that captures how i've been feeling lately. 
     <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0lGAuc0SvIydCI69gDIfzi?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 </div>
 
-Part of a pretty big album that he released this week. I liked a lot of the songs but I wouldn't say that any stand out too much but i'd say this is the exception. The production on it is just so cool.
+Part of a pretty big album that he released this week. I liked a lot of the songs but other than this one, I wouldn't say that any stand out too much. The production on it is just so cool.
