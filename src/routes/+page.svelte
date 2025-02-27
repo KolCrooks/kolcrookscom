@@ -45,7 +45,9 @@
             <img src="{base}/pics/farm_colony/IMG_0987.JPG" alt="farm colony" />
             <div class="bg-black/50 grow min-w-fit ml-1 mr-1">
                 <div class="text-3xl m-2">
-                    Recent Activities <button
+                    Recent Activities
+                    <div>
+                        <button
                         class="cs-btn float-end z-20 relative cursor-none"
                         onclick={() => {
                             audio.pause();
@@ -53,7 +55,17 @@
                             audio.play();
                             add_fun();
                         }}>Click me</button
-                    >
+                        >
+                        <form action="/blog">
+                            <button
+                                class="cs-btn float-end z-20 relative cursor-none mx-2"
+                                type="submit"
+                                href=""
+                            >
+                                Blog
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <hr class="cs-hr" />
                 <div class="text-xl">
@@ -61,7 +73,7 @@
                         <li class="ml-6">I made this</li>
                         <li class="ml-6">Working on a cool camera</li>
                         <li class="ml-6">idk probably something else</li>
-                        <li class="ml-6">I might make a blog</li>
+                        <li class="ml-6">I <span class="line-through">might make</span> made a blog</li>
                     </ul>
                 </div>
             </div>
@@ -101,6 +113,8 @@
 </div>
 
 <style lang="scss">
+    @import "../cs16.min.css";
+
 	.canvas {
 		width: 100%;
 		height: 100vh;

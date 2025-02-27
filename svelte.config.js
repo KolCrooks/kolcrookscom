@@ -10,7 +10,10 @@ const config = {
 			base: process.argv.includes('dev') ? '' : '/kolcrookscom'
 		}
 	},
-    preprocess: [mdsvex()],
+    preprocess: [mdsvex({
+        layout: "./src/routes/blog/blog-layout.svelte",
+        extensions: [".svx"],
+    })],
     extensions: [".svelte", ".svx"],
 };
 
