@@ -111,9 +111,11 @@
     {/each}
 </div>
 
-<style lang="scss">
-    @import "../cs16.min.css";
+<svelte:head>
+<link rel="stylesheet" href="{base}/cs16.min.css" media="all" />
+</svelte:head>
 
+<style lang="scss">
 	.canvas {
 		width: 100%;
 		height: 100vh;
