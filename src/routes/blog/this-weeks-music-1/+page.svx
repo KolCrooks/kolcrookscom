@@ -11,8 +11,8 @@ Bit of an aside here before I start the post. I don't really have strong goals f
 
 ## Album: bbpue - bbpue
 
-<div class="float-left w-md mr-4">
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/7aKQNWCBsxQcyTgrxDuOvj?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<div class="float-left w-md max-w-full mr-4">
+    <iframe title="bbpue - bbpue" style="border-radius:12px" src="https://open.spotify.com/embed/album/7aKQNWCBsxQcyTgrxDuOvj?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 </div>
 
 This is a pretty cool album that I ran into while clicking through related artists. The first song has a vibe thats very much "kol" so it captured my attention immediately. Its hard to really place the genre of it, but I would maybe label the album as indie electronic? Honestly it's hard to say, but I guess thats why labeling things isn't always great.
@@ -21,7 +21,6 @@ I thoroughly enjoyed this album, and have found myself playing it on repeat for 
 
 <br class="my-4 block clear-left">
 
----
 
 Side note: After enjoying the album so much, I started looking into the artist and found this on their instagram:
 
@@ -36,8 +35,8 @@ I will say I am shocked by both the production quality and the mixing of the alb
 
 ### Today I layed down - bl4ck m4rket c4rt
 
-<div class="float-left w-md mr-4">
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/03n6VoKqqa3KMlMfyVtMEY?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<div class="float-left w-md max-w-full mr-4">
+    <iframe title="bl4ck m4rket c4rt - Today I layed down" style="border-radius:12px" src="https://open.spotify.com/embed/track/03n6VoKqqa3KMlMfyVtMEY?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 </div>
 
 There is something about this track that captures how i've been feeling lately. Today I layed down. If you liked the album above, you should definitely check this out.
@@ -46,8 +45,8 @@ There is something about this track that captures how i've been feeling lately. 
 
 ### 魔鬼似爪牙 - Jackzebra
 
-<div class="float-left w-md mr-4">
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0lGAuc0SvIydCI69gDIfzi?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<div class="float-left w-md max-w-full mr-4">
+    <iframe title="Jackzebra - 魔鬼似爪牙" style="border-radius:12px" src="https://open.spotify.com/embed/track/0lGAuc0SvIydCI69gDIfzi?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 </div>
 
 Part of a pretty big album that he released this week. I liked a lot of the songs but other than this one, I wouldn't say that any stand out too much. The production on it is just so cool.
