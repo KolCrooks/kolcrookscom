@@ -15,6 +15,7 @@
 		showCollision = false,
 		showChunks = false,
 		noclip = false,
+		touch,
 		locked = $bindable(false),
 		lock = $bindable(() => {}),
 		stats = $bindable({ loaded: 0, loading: 0, total: 0, loadedBytes: 0, totalBytes: 0 })
@@ -95,6 +96,6 @@
 <World gravity={[0, -9.81, 0]}>
 	<Collision {manifest} {voxels} show={showCollision} />
 	{#if camera}
-		<Player {camera} spawn={manifest.spawn} {noclip} bind:locked bind:lock />
+		<Player {camera} spawn={manifest.spawn} {noclip} {touch} bind:locked bind:lock />
 	{/if}
 </World>

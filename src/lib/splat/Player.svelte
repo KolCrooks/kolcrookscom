@@ -12,6 +12,7 @@
 		camera,
 		spawn,
 		noclip = false,
+		touch = { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false },
 		locked = $bindable(false),
 		lock = $bindable(() => {})
 	} = $props();
@@ -25,6 +26,7 @@
 	const JUMP = 3.8;
 	const GRAVITY = 9.81;
 	const LOOK = 0.0022;
+	const TOUCH_LOOK = 0.005;
 
 	const { world, rapier } = useRapier();
 	const { renderer } = useThrelte();
@@ -115,9 +117,22 @@
 
 	usePhysicsTask((delta) => {
 		const dt = Math.min(delta, 1 / 20);
-		const fwd = axis('KeyW', 'KeyS') + axis('ArrowUp', 'ArrowDown');
-		const strafe = axis('KeyD', 'KeyA') + axis('ArrowRight', 'ArrowLeft');
-		const speed = keys.has('ShiftLeft') || keys.has('ShiftRight') ? RUN : WALK;
+
+		// touch: consume accumulated look drag and queued jump
+		if (touch.lookX || touch.lookY) {
+			yaw -= touch.lookX * TOUCH_LOOK;
+			pitch = Math.max(-1.55, Math.min(1.55, pitch - touch.lookY * TOUCH_LOOK));
+			touch.lookX = touch.lookY = 0;
+		}
+		if (touch.jump) {
+			jumpQueuedAt = performance.now();
+			touch.jump = false;
+		}
+
+		const fwd = axis('KeyW', 'KeyS') + axis('ArrowUp', 'ArrowDown') + touch.moveY;
+		const strafe = axis('KeyD', 'KeyA') + axis('ArrowRight', 'ArrowLeft') + touch.moveX;
+		const run = keys.has('ShiftLeft') || keys.has('ShiftRight') || Math.hypot(touch.moveX, touch.moveY) > 0.95;
+		const speed = run ? RUN : WALK;
 		const pos = body.translation();
 		let next;
 
@@ -127,14 +142,16 @@
 			right.crossVectors(forward, camera.up).normalize();
 			wish.set(0, 0, 0).addScaledVector(forward, fwd).addScaledVector(right, strafe);
 			wish.y += axis('Space', 'KeyQ');
-			if (wish.lengthSq() > 0) wish.normalize().multiplyScalar(speed * dt);
+			if (wish.lengthSq() > 1) wish.normalize();
+			wish.multiplyScalar(speed * dt);
 			next = { x: pos.x + wish.x, y: pos.y + wish.y, z: pos.z + wish.z };
 			vy = 0;
 		} else {
 			forward.set(-Math.sin(yaw), 0, -Math.cos(yaw));
 			right.set(Math.cos(yaw), 0, -Math.sin(yaw));
 			wish.set(0, 0, 0).addScaledVector(forward, fwd).addScaledVector(right, strafe);
-			if (wish.lengthSq() > 0) wish.normalize().multiplyScalar(speed * dt);
+			if (wish.lengthSq() > 1) wish.normalize();
+			wish.multiplyScalar(speed * dt);
 
 			if (grounded) {
 				const jump = performance.now() - jumpQueuedAt < 200;

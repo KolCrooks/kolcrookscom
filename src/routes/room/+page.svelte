@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { NoToneMapping, WebGLRenderer } from 'three';
 	import SplatScene from '#lib/splat/SplatScene.svelte';
+	import TouchControls from '#lib/splat/TouchControls.svelte';
 
 	/** @type {{ manifest: any, baseUrl: URL, voxels: Int16Array } | null} */
 	let scene = $state(null);
@@ -16,9 +17,35 @@
 	let showChunks = $state(false);
 	let noclip = $state(false);
 
+	// Touch devices have no pointer lock: "touch mode" shows on-screen controls instead.
+	let isTouch = $state(false);
+	let touchMode = $state(false);
+	// plain (non-reactive) object mutated by TouchControls and read by the Player every tick
+	const touchInput = { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false };
+	let playing = $derived(locked || touchMode);
+
+	/** @param {MouseEvent} e */
+	function start(e) {
+		const pointerType = /** @type {PointerEvent} */ (e).pointerType;
+		const viaTouch = pointerType ? pointerType !== 'mouse' : isTouch;
+		if (viaTouch) {
+			touchMode = true;
+			document.documentElement.requestFullscreen?.({ navigationUI: 'hide' }).catch(() => {});
+		} else {
+			lock();
+		}
+	}
+
+	function exitTouchMode() {
+		touchMode = false;
+		Object.assign(touchInput, { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false });
+		if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+	}
+
 	const mb = (/** @type {number} */ b) => (b / 1e6).toFixed(1);
 
 	onMount(async () => {
+		isTouch = matchMedia('(pointer: coarse)').matches;
 		try {
 			const manifestUrl = new URL(asset('splats/room/manifest.json'), location.href);
 			const manifest = await (await fetch(manifestUrl)).json();
@@ -48,7 +75,7 @@
 	<link rel="stylesheet" href={asset('cs16.min.css')} media="all" />
 </svelte:head>
 
-<div class="fixed inset-0 bg-black">
+<div class="fixed inset-0 overscroll-none bg-black select-none">
 	{#if scene}
 		<Canvas
 			renderMode="always"
@@ -63,6 +90,7 @@
 				{showCollision}
 				{showChunks}
 				{noclip}
+				touch={touchInput}
 				bind:locked
 				bind:lock
 				bind:stats
@@ -79,15 +107,18 @@
 				· {mb(stats.loadedBytes)}/{mb(stats.totalBytes)} MB
 			</div>
 		{/if}
-		<div class="text-white/50">
+		<div class="text-white/50" class:hidden={isTouch}>
 			[C] collision {showCollision ? 'on' : 'off'} · [B] chunks {showChunks ? 'on' : 'off'} · [N] noclip
 			{noclip ? 'on' : 'off'}
 		</div>
 	</div>
 
-	{#if locked}
+	{#if playing}
 		<div class="pointer-events-none absolute top-1/2 left-1/2 h-1 w-1 -translate-1/2 rounded-full bg-white/70"></div>
-	{:else}
+	{/if}
+	{#if touchMode}
+		<TouchControls input={touchInput} onmenu={exitTouchMode} />
+	{:else if !locked}
 		<div class="absolute inset-0 flex items-center justify-center bg-black/40">
 			<div class="panel max-w-md p-4">
 				<div class="mb-2 text-3xl">Kol's room</div>
@@ -100,16 +131,25 @@
 					<p class="my-3">
 						A gaussian splat that streams in chunk by chunk, starting with whatever you're looking at.
 					</p>
-					<ul class="mb-3 list-disc pl-6 text-sm">
-						<li>Mouse: look around</li>
-						<li>WASD / arrows: walk · Shift: run · Space: jump</li>
-						<li>N: noclip (Space/Q up/down) · C: show collision · B: show chunks</li>
-						<li>Esc: release the mouse</li>
-					</ul>
+					{#if isTouch}
+						<ul class="mb-3 list-disc pl-6 text-sm">
+							<li>Left thumb: move (push to the edge to run)</li>
+							<li>Right thumb: drag to look around</li>
+							<li>Jump button to jump · Menu to come back here</li>
+							<li>Landscape works best</li>
+						</ul>
+					{:else}
+						<ul class="mb-3 list-disc pl-6 text-sm">
+							<li>Mouse: look around</li>
+							<li>WASD / arrows: walk · Shift: run · Space: jump</li>
+							<li>N: noclip (Space/Q up/down) · C: show collision · B: show chunks</li>
+							<li>Esc: release the mouse</li>
+						</ul>
+					{/if}
 					<div class="cs-progress-bar mb-3">
 						<div class="bars" style:width="{stats.total ? (100 * stats.loaded) / stats.total : 0}%"></div>
 					</div>
-					<button class="cs-btn" onclick={() => lock()}>Click to explore</button>
+					<button class="cs-btn" onclick={start}>{isTouch ? 'Tap' : 'Click'} to explore</button>
 				{/if}
 				<a class="cs-btn ml-2 inline-block" href={resolve('')}>Back home</a>
 			</div>
