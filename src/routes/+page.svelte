@@ -68,12 +68,12 @@
                                 Blog
                             </button>
                         </form>
-                        <form action={resolve('room')}>
+                        <form action={resolve('home')}>
                             <button
                                 class="cs-btn float-end z-20 relative cursor-none"
                                 type="submit"
                             >
-                                Room
+                                Home
                             </button>
                         </form>
                     </div>

@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
 		"deploy": "yarn build && echo 'kolcrooks.com' > build/CNAME && yarn gh-pages -d build -t",
-		"build:splat": "node scripts/build-splat.mjs ~/Downloads/splat.ply static/splats/room --scale 1.3"
+		"build:splat": "node scripts/build-splat.mjs ~/Downloads/splat.ply static/splats/home --scale 1.3 --spawn=-4.6,1.2,20"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^4.0.0",

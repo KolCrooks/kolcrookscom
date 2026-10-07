@@ -13,7 +13,10 @@
  *
  * Usage:
  *   node scripts/build-splat.mjs <input.ply> <outDir> [--scale 1.3] [--chunk 1.5] [--max-sh 3]
- *     [--min-opacity 0.02] [--voxel 0.08] [--floor auto|<y>] [--no-flip]
+ *     [--min-opacity 0.02] [--voxel 0.08] [--floor auto|<y>] [--no-flip] [--spawn x,z,yawDeg]
+ *
+ * --spawn sets the start position (world meters, feet on the floor) and heading in degrees
+ * (0 = looking toward -Z, positive turns left). Without it, the most open spot is picked.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,7 +32,8 @@ const { values: opts, positionals } = parseArgs({
 		'min-opacity': { type: 'string', default: '0.02' }, // drop nearly invisible splats
 		voxel: { type: 'string', default: '0.08' }, // collision voxel size in meters
 		floor: { type: 'string', default: 'auto' }, // floor height in (flipped, scaled) world units
-		'no-flip': { type: 'boolean', default: false } // input is already Y-up (not OpenCV Y-down)
+		'no-flip': { type: 'boolean', default: false }, // input is already Y-up (not OpenCV Y-down)
+		spawn: { type: 'string' } // "x,z,yawDeg" start pose in world space (default: most open spot)
 	}
 });
 
@@ -293,13 +297,25 @@ for (let c = 0; c < gx * gz; c++) {
 	const score = Math.min(clearance[c], 10) - 0.05 * Math.hypot(px - cx, pz - cz) / VOXEL;
 	if (score > bestScore) { bestScore = score; bestCell = c; }
 }
-const si = Math.floor(bestCell / gz), sk = bestCell % gz;
-const spawn = [gOrigin[0] + (si + 0.5) * VOXEL, 0, gOrigin[2] + (sk + 0.5) * VOXEL];
-// face along the longer room axis, toward the farther end
-const yaw = x1 - x0 >= z1 - z0
-	? (spawn[0] - x0 > x1 - spawn[0] ? Math.PI / 2 : -Math.PI / 2)
-	: (spawn[2] - z0 > z1 - spawn[2] ? 0 : Math.PI);
-log(`spawn at (${spawn[0].toFixed(2)}, ${spawn[2].toFixed(2)}), clearance ${(clearance[bestCell] * VOXEL).toFixed(2)}m`);
+let spawn, yaw;
+if (opts.spawn) {
+	const [sx, sz, yawDeg = 0] = opts.spawn.split(',').map(Number);
+	if (![sx, sz, yawDeg].every(Number.isFinite)) throw new Error('--spawn expects x,z,yawDeg');
+	spawn = [sx, 0, sz];
+	yaw = (yawDeg * Math.PI) / 180;
+	const ci = Math.floor((sx - gOrigin[0]) / VOXEL), ck = Math.floor((sz - gOrigin[2]) / VOXEL);
+	const inside = ci >= 0 && ci < gx && ck >= 0 && ck < gz;
+	if (!inside || blocked[ci * gz + ck]) console.warn(`warning: --spawn (${sx}, ${sz}) is blocked or outside the scene`);
+	log(`spawn (manual) at (${sx.toFixed(2)}, ${sz.toFixed(2)}), clearance ${(inside ? clearance[ci * gz + ck] * VOXEL : 0).toFixed(2)}m`);
+} else {
+	const si = Math.floor(bestCell / gz), sk = bestCell % gz;
+	spawn = [gOrigin[0] + (si + 0.5) * VOXEL, 0, gOrigin[2] + (sk + 0.5) * VOXEL];
+	// face along the longer scene axis, toward the farther end
+	yaw = x1 - x0 >= z1 - z0
+		? (spawn[0] - x0 > x1 - spawn[0] ? Math.PI / 2 : -Math.PI / 2)
+		: (spawn[2] - z0 > z1 - spawn[2] ? 0 : Math.PI);
+	log(`spawn (auto) at (${spawn[0].toFixed(2)}, ${spawn[2].toFixed(2)}), clearance ${(clearance[bestCell] * VOXEL).toFixed(2)}m`);
+}
 
 // ---------------------------------------------------------------------------------------------
 // Manifest

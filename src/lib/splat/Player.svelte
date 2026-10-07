@@ -91,7 +91,17 @@
 	}
 
 	onMount(() => {
-		if (import.meta.env.DEV) /** @type {any} */ (window).__room = { body, camera, get grounded() { return grounded; } };
+		if (import.meta.env.DEV) /** @type {any} */ (window).__home = {
+				body,
+				camera,
+				get grounded() { return grounded; },
+				/** dev/test helper: teleport (feet position) and aim */
+				teleport(/** @type {number} */ x, /** @type {number} */ z, /** @type {number} */ y = yaw, p = 0) {
+					body.setTranslation({ x, y: CENTER_Y + 0.05, z }, true);
+					yaw = y;
+					pitch = p;
+				}
+			};
 		document.addEventListener('pointerlockchange', onPointerLockChange);
 		document.addEventListener('mousemove', onMouseMove);
 		window.addEventListener('keydown', onKeyDown);

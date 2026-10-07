@@ -47,7 +47,7 @@
 	onMount(async () => {
 		isTouch = matchMedia('(pointer: coarse)').matches;
 		try {
-			const manifestUrl = new URL(asset('splats/room/manifest.json'), location.href);
+			const manifestUrl = new URL(asset('splats/home/manifest.json'), location.href);
 			const manifest = await (await fetch(manifestUrl)).json();
 			const baseUrl = new URL('.', manifestUrl);
 			const res = await fetch(new URL(manifest.collision.url, baseUrl));
@@ -55,7 +55,7 @@
 			scene = { manifest, baseUrl, voxels };
 		} catch (e) {
 			console.error(e);
-			error = 'Failed to load the room.';
+			error = 'Failed to load the splat.';
 		}
 	});
 
@@ -71,7 +71,7 @@
 <svelte:window onkeydown={onKey} />
 
 <svelte:head>
-	<title>Room · Kol Crooks</title>
+	<title>Home · Kol Crooks</title>
 	<link rel="stylesheet" href={asset('cs16.min.css')} media="all" />
 </svelte:head>
 
@@ -121,7 +121,7 @@
 	{:else if !locked}
 		<div class="absolute inset-0 flex items-center justify-center bg-black/40">
 			<div class="panel max-w-md p-4">
-				<div class="mb-2 text-3xl">Kol's room</div>
+				<div class="mb-2 text-3xl">Kol's home</div>
 				<hr class="cs-hr" />
 				{#if error}
 					<p class="my-3 text-red-300">{error}</p>
@@ -151,7 +151,7 @@
 					</div>
 					<button class="cs-btn" onclick={start}>{isTouch ? 'Tap' : 'Click'} to explore</button>
 				{/if}
-				<a class="cs-btn ml-2 inline-block" href={resolve('')}>Back home</a>
+				<a class="cs-btn ml-2 inline-block" href={resolve('')}>Back</a>
 			</div>
 		</div>
 	{/if}
