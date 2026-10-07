@@ -55,6 +55,7 @@ const COL_MAX_SIZE = 0.4; // ignore huge blurry splats (m, largest axis)
 const COL_THRESHOLD = 5; // opacity-weighted samples needed per voxel
 const COL_MIN_CLUSTER = 30; // drop floater clusters smaller than this (voxels)
 const COL_MIN_HEIGHT = 0.12; // floor is handled by a slab collider; ignore floor bumps below this
+const COL_MAX_HEIGHT = 2.2; // above head height at the top of a jump: drop the ceiling + ceiling floaters
 const BODY_BAND = [0.3, 1.7]; // height band that blocks a walking player (for spawn search)
 
 const t0 = performance.now();
@@ -260,7 +261,8 @@ for (let start = 0; start < solidVox.length; start++) {
 
 const minJ = Math.ceil(COL_MIN_HEIGHT / VOXEL);
 const coords = [];
-for (let i = 0; i < gx; i++) for (let j = minJ; j < gy; j++) for (let k = 0; k < gz; k++) {
+const maxJ = Math.floor(COL_MAX_HEIGHT / VOXEL); // voxel j spans [j*V, (j+1)*V)
+for (let i = 0; i < gx; i++) for (let j = minJ; j < Math.min(gy, maxJ); j++) for (let k = 0; k < gz; k++) {
 	if (solidVox[vidx(i, j, k)]) coords.push(i, j, k);
 }
 fs.writeFileSync(path.join(outDir, 'collision.bin'), Buffer.from(new Int16Array(coords).buffer));

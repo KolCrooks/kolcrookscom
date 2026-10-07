@@ -21,7 +21,7 @@
 	let isTouch = $state(false);
 	let touchMode = $state(false);
 	// plain (non-reactive) object mutated by TouchControls and read by the Player every tick
-	const touchInput = { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false };
+	const touchInput = { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false, crouch: false };
 	let playing = $derived(locked || touchMode);
 
 	/** @param {MouseEvent} e */
@@ -38,7 +38,7 @@
 
 	function exitTouchMode() {
 		touchMode = false;
-		Object.assign(touchInput, { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false });
+		Object.assign(touchInput, { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false, crouch: false });
 		if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
 	}
 
@@ -62,7 +62,7 @@
 	/** @param {KeyboardEvent} e */
 	function onKey(e) {
 		if (e.repeat) return;
-		if (e.code === 'KeyC') showCollision = !showCollision;
+		if (e.code === 'KeyV') showCollision = !showCollision;
 		if (e.code === 'KeyB') showChunks = !showChunks;
 		if (e.code === 'KeyN') noclip = !noclip;
 	}
@@ -108,7 +108,7 @@
 			</div>
 		{/if}
 		<div class="text-white/50" class:hidden={isTouch}>
-			[C] collision {showCollision ? 'on' : 'off'} · [B] chunks {showChunks ? 'on' : 'off'} · [N] noclip
+			[V] collision {showCollision ? 'on' : 'off'} · [B] chunks {showChunks ? 'on' : 'off'} · [N] noclip
 			{noclip ? 'on' : 'off'}
 		</div>
 	</div>
@@ -128,21 +128,17 @@
 				{:else if !scene}
 					<p class="my-3">Loading…</p>
 				{:else}
-					<p class="my-3">
-						A gaussian splat that streams in chunk by chunk, starting with whatever you're looking at.
-					</p>
 					{#if isTouch}
 						<ul class="mb-3 list-disc pl-6 text-sm">
 							<li>Left thumb: move (push to the edge to run)</li>
 							<li>Right thumb: drag to look around</li>
-							<li>Jump button to jump · Menu to come back here</li>
+							<li>Jump / Crouch buttons · Menu to come back here</li>
 							<li>Landscape works best</li>
 						</ul>
 					{:else}
 						<ul class="mb-3 list-disc pl-6 text-sm">
 							<li>Mouse: look around</li>
-							<li>WASD / arrows: walk · Shift: run · Space: jump</li>
-							<li>N: noclip (Space/Q up/down) · C: show collision · B: show chunks</li>
+							<li>WASD / arrows: walk · Shift: run · Space: jump · C: crouch</li>
 							<li>Esc: release the mouse</li>
 						</ul>
 					{/if}

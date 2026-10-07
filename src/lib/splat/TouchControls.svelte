@@ -4,7 +4,8 @@
 	 * push to the rim to run), drag anywhere on the right half to look, plus Jump / Menu buttons.
 	 *
 	 * Writes into `input`, a plain mutable object the Player reads every physics tick:
-	 *   moveX/moveY in [-1, 1] (strafe / forward), lookX/lookY accumulated pixels, jump flag.
+	 *   moveX/moveY in [-1, 1] (strafe / forward), lookX/lookY accumulated pixels, jump flag,
+ *   crouch (toggled by the Crouch button).
 	 */
 	let { input, onmenu } = $props();
 
@@ -16,6 +17,7 @@
 	let lookId = null;
 	let lastX = 0;
 	let lastY = 0;
+	let crouching = $state(false);
 
 	/** @param {PointerEvent} e */
 	function down(e) {
@@ -93,6 +95,16 @@
 </div>
 
 <button class="cs-btn touch-btn jump" onpointerdown={jump}>Jump</button>
+<button
+	class="cs-btn touch-btn crouch"
+	class:active={crouching}
+	onpointerdown={(e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		crouching = !crouching;
+		input.crouch = crouching;
+	}}>Crouch</button
+>
 <button class="cs-btn touch-btn menu" onclick={onmenu}>Menu</button>
 
 <style>
@@ -137,6 +149,15 @@
 		font-size: 20px;
 		line-height: 20px;
 		padding: 18px 16px;
+	}
+	.crouch {
+		right: 28px;
+		bottom: 124px;
+		padding: 10px 8px;
+	}
+	.crouch.active {
+		color: var(--accent);
+		border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
 	}
 	.menu {
 		right: 8px;

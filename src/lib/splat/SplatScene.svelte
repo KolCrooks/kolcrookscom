@@ -86,7 +86,7 @@
 	oncreate={(cam) => {
 		// start at the spawn so the very first chunk requests are the right ones
 		const [x, y, z] = manifest.spawn.position;
-		cam.position.set(x, y + 1.57, z);
+		cam.position.set(x, y + 1.17, z);
 		cam.rotation.set(0, manifest.spawn.yaw, 0, 'YXZ');
 	}}
 />
