@@ -138,7 +138,7 @@
 					{:else}
 						<ul class="mb-3 list-disc pl-6 text-sm">
 							<li>Mouse: look around</li>
-							<li>WASD / arrows: walk · Shift: run · Space: jump · C: crouch</li>
+							<li>WASD / arrows: walk · Space: jump · C: crouch</li>
 							<li>Esc: release the mouse</li>
 						</ul>
 					{/if}

@@ -16,7 +16,8 @@ export default defineConfig({
 			],
 			extensions: ['.svelte', '.svx'],
 			adapter: adapter(),
-			paths: { base: process.argv.includes('dev') ? '' : '/kolcrookscom' }
+			// served from the root of the custom domain (kolcrooks.com), not /kolcrookscom
+			paths: { base: '' }
 		}),
 		tailwindcss()
 	]

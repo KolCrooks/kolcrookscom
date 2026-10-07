@@ -19,16 +19,16 @@
 		lock = $bindable(() => {})
 	} = $props();
 
-	const RADIUS = 0.2; // slim enough for this apartment's doorways
+	const RADIUS = 0.01; // slim enough for this apartment's doorways
 	const STAND_HEIGHT = 1.7;
 	const CROUCH_HEIGHT = 1.0;
 	const EYE_HEIGHT = 1.17; // eye above the floor when standing
 	const CROUCH_EYE_HEIGHT = EYE_HEIGHT - 0.5;
 	const EYE_SMOOTHING = 12; // 1/s, how fast the eye follows crouch/stand
 	const WALK = 1.8;
-	const RUN = 3.6;
+	const RUN = 1.8;
 	const CROUCH_WALK = 0.9;
-	const GRAVITY = 10.81;
+	const GRAVITY = 9.81;
 	const JUMP_HEIGHT = 0.45; // the ceiling is only ~0.6m above a standing head
 	const JUMP = Math.sqrt(2 * GRAVITY * JUMP_HEIGHT);
 	const LOOK = 0.0022;
@@ -207,13 +207,19 @@
 			if (wish.lengthSq() > 1) wish.normalize();
 			wish.multiplyScalar(speed * dt);
 
-			if (grounded) {
+			// Voxel walls are bumpy: while rising along one, Rapier can report "grounded" from
+			// grazing a ledge. Only trust grounded when not moving up, or it cancels the jump.
+			const onGround = grounded && vy <= 0;
+			if (onGround) {
 				const jump = !crouched && performance.now() - jumpQueuedAt < 200;
 				if (jump) jumpQueuedAt = -Infinity;
 				vy = jump ? JUMP : -0.5; // small push keeps us snapped to the floor
 			} else {
 				vy -= GRAVITY * dt;
 			}
+			// autostep only on the ground; mid-air it pops us up onto wall bumps
+			if (onGround) controller.enableAutostep(0.3, 0.12, false);
+			else controller.disableAutostep();
 			controller.computeColliderMovement(collider, { x: wish.x, y: vy * dt, z: wish.z });
 			const moved = controller.computedMovement();
 			grounded = controller.computedGrounded();
