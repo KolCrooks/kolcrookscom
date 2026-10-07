@@ -1,24 +1,22 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-    import { base } from '$app/paths';
+    import { onMount } from 'svelte';
+    import { asset } from '$app/paths';
 
-	let cursorImg: HTMLImageElement;
+    let cursorImg: HTMLImageElement;
 
-	let akGun: HTMLImageElement;
+    let akGun: HTMLImageElement;
 	let akSounds = $state(
         [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
             undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-        ]);
-    let n_sounds = [0,1,2,3,4,5];
+    ]);
 
-
-
-    let pos = $state({x: 0, y: 0});
+    let n_sounds = [0, 1, 2, 3, 4, 5];
+    let pos = $state({ x: 0, y: 0 });
     let offset = $state(0);
     let offset_rounded = $derived(Math.round(offset));
     let ak_angle = $state(0);
@@ -60,27 +58,44 @@
             offset += 10;
 		};
 
-		window.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousedown', handleMouseDown);
 
-		window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mousemove', handleMouseMove);
 
-		return () => {
-			window.removeEventListener('mousemove', handleMouseMove);
-			window.removeEventListener('mousedown', handleMouseDown);
-		};
-	});
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mousedown', handleMouseDown);
+        };
+    });
 </script>
 
-<div class="follow-cursor" style="top: {pos.y-offset_rounded}px; left: {pos.x}px" bind:this={cursorImg}>
-	<img src="{base}/cursor.png" alt="" />
-</div>
+<div
+    class="follow-cursor"
+    style="top: {pos.y - offset_rounded}px; left: {pos.x}px"
+    bind:this={cursorImg}
+><img src={asset('cursor.png')} alt="" /></div>
+
 <div class="ak" style="transform: skew({ak_angle}deg)">
-    <img class="relative ak-flash" style={show_flash ? "" : "display: none"} src="{base}/pics/muzzle-flash.webp" alt="ak-flash" />
-    <img class="relative" src="{base}/pics/V_ak47.webp" alt="ak" />
+    <img
+        class="relative ak-flash"
+        style={show_flash ? "" : "display: none"}
+        src={asset('pics/muzzle-flash.webp')}
+        alt="ak-flash"
+    />
+
+    <img
+        class="relative"
+        src={asset('pics/V_ak47.webp')}
+        alt="ak"
+    />
 </div>
 
 {#each n_sounds as i}
-    <audio src="{base}/sound/ak_sound.mp3" volume={0.3} bind:this={akSounds[i]}></audio>
+    <audio
+        src={asset('sound/ak_sound.mp3')}
+        volume={0.3}
+        bind:this={akSounds[i]}
+    ></audio>
 {/each}
 
 <style>

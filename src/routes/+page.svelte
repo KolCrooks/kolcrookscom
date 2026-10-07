@@ -1,35 +1,35 @@
 <script>
-	import Cursor from '$lib/cursor.svelte';
-	import Scene from '$lib/scene.svelte';
-    import { base } from '$app/paths';
+    import Cursor from '#lib/cursor.svelte';
+    import Scene from '#lib/scene.svelte';
+    import { asset, resolve } from '$app/paths';
 
-	import { Canvas } from '@threlte/core';
+    import { Canvas } from '@threlte/core';
 
-	let add_fun = $state(() => console.log('nothin'));
+    let add_fun = $state(() => console.log('nothin'));
 
-	let audio;
+    let audio;
 
-	let images = [
-		'IMG_0975.JPG',
-		'IMG_0976.JPG',
-		'IMG_0977.JPG',
-		'IMG_0978.JPG',
-		'IMG_0979.JPG',
-		'IMG_0980.JPG',
-		'IMG_0981.JPG',
-		'IMG_0982.JPG',
-		'IMG_0983.JPG',
-		'IMG_0984.JPG',
-		'IMG_0985.JPG',
-		'IMG_0986.JPG',
-		'IMG_0988.JPG',
-		'IMG_0989.JPG',
-		'IMG_0990.JPG',
-		'IMG_0991.JPG',
-		'IMG_0992.JPG',
-		'IMG_0993.JPG',
-		'IMG_0994.JPG'
-	];
+    let images = [
+        'IMG_0975.JPG',
+        'IMG_0976.JPG',
+        'IMG_0977.JPG',
+        'IMG_0978.JPG',
+        'IMG_0979.JPG',
+        'IMG_0980.JPG',
+        'IMG_0981.JPG',
+        'IMG_0982.JPG',
+        'IMG_0983.JPG',
+        'IMG_0984.JPG',
+        'IMG_0985.JPG',
+        'IMG_0986.JPG',
+        'IMG_0988.JPG',
+        'IMG_0989.JPG',
+        'IMG_0990.JPG',
+        'IMG_0991.JPG',
+        'IMG_0992.JPG',
+        'IMG_0993.JPG',
+        'IMG_0994.JPG'
+    ];
 
     function seededRandom(seed) {
         let offset = 1;
@@ -42,21 +42,25 @@
     <hr class="cs-hr" />
     <div>
         <div class="p-1 flex flex-wrap">
-            <img src="{base}/pics/farm_colony/IMG_0987.JPG" alt="farm colony" />
+            <img
+                src={asset('pics/farm_colony/IMG_0987.JPG')}
+                alt="farm colony"
+            />
+
             <div class="bg-black/50 grow min-w-fit ml-1 mr-1">
                 <div class="text-3xl m-2">
                     Recent Activities
                     <div>
                         <button
-                        class="cs-btn float-end z-20 relative cursor-none"
-                        onclick={() => {
-                            audio.pause();
-                            audio.currentTime = 0;
-                            audio.play();
-                            add_fun();
-                        }}>Click me</button
-                        >
-                        <form action="{base}/blog">
+                            class="cs-btn float-end z-20 relative cursor-none"
+                            onclick={() => {
+                                audio.pause();
+                                audio.currentTime = 0;
+                                audio.play();
+                                add_fun();
+                            }}
+                        >Click me</button>
+                        <form action={resolve('blog')}>
                             <button
                                 class="cs-btn float-end z-20 relative cursor-none mx-2"
                                 type="submit"
@@ -99,12 +103,19 @@
         </Canvas>
     </div>
 </div>
-<audio src="{base}/sound/button.wav" bind:this={audio}></audio>
-<div class="absolute overflow-x-clip top-0 left-0 w-full h-full flex flex-wrap justify-center items-center -z-10">
+
+<audio
+    src={asset('sound/button.wav')}
+    bind:this={audio}
+></audio>
+
+<div
+    class="absolute overflow-x-clip top-0 left-0 w-full h-full flex flex-wrap justify-center items-center -z-10"
+>
     {#each images as image, index}
-        <img 
-            src={`${base}/pics/farm_colony/${image}`} 
-            alt={`farm colony ${index}`} 
+        <img
+            src={asset(`pics/farm_colony/${image}`)}
+            alt={`farm colony ${index}`}
             class="absolute select-none"
             style={`top: ${seededRandom(index) * 200}%; left: ${seededRandom(index + images.length) * 100}%; transform: translate(-50%, -50%);`} 
         />
@@ -112,7 +123,11 @@
 </div>
 
 <svelte:head>
-<link rel="stylesheet" href="{base}/cs16.min.css" media="all" />
+    <link
+        rel="stylesheet"
+        href={asset('cs16.min.css')}
+        media="all"
+    />
 </svelte:head>
 
 <style lang="scss">

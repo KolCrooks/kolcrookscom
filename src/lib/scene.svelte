@@ -1,7 +1,7 @@
 <script>
-	import Crate from '$lib/crate.svelte';
-	import Barrel from '$lib/barrel.svelte';
-	import Ground from '$lib/ground.svelte';
+	import Crate from '#lib/crate.svelte';
+	import Barrel from '#lib/barrel.svelte';
+	import Ground from '#lib/ground.svelte';
 	import { T, useTask } from '@threlte/core';
 	import { usePhysicsTask, useRapier, World } from '@threlte/rapier';
 	import { AudioListener } from '@threlte/extras';

@@ -1,6 +1,23 @@
+<script>
+    import { resolve } from '$app/paths';
+
+    let posts = [
+        {
+            title: 'This Weeks Music #1',
+            slug: 'this-weeks-music-1',
+            date: '02/26/2025'
+        }
+    ];
+</script>
+
 <div class="container mx-auto my-8 max-w-2xl">
     <h1 class="text-3xl font-bold mb-3 text-left">Kol's Blog Posts</h1>
-    <a href="{base}/" class="text-blue-600 hover:underline text-xl mb-4 block">← Back to home</a>
+
+    <a
+        href={resolve('')}
+        class="text-blue-600 hover:underline text-xl mb-4 block"
+    >← Back to home</a>
+
     <form
         action="https://buttondown.com/api/emails/embed-subscribe/kol"
         method="post"
@@ -36,10 +53,3 @@
         {/each}
     </ul>
 </div>
-
-<script>
-    import { base } from '$app/paths';
-    let posts = [
-        { title: 'This Weeks Music #1', slug: 'this-weeks-music-1', date: '02/26/2025' },
-    ];
-</script>
