@@ -24,13 +24,24 @@
 	const touchInput = { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false, crouch: false };
 	let playing = $derived(locked || touchMode);
 
+	// Input type of the press that started the current tap/click. Taken from pointerdown,
+	// because iOS Safari reports pointerType "mouse" on the click synthesized from a tap.
+	let pressPointerType = '';
+
 	/** @param {MouseEvent} e */
 	function start(e) {
-		const pointerType = /** @type {PointerEvent} */ (e).pointerType;
+		const pointerType = pressPointerType || /** @type {PointerEvent} */ (e).pointerType;
+		pressPointerType = '';
 		const viaTouch = pointerType ? pointerType !== 'mouse' : isTouch;
-		if (viaTouch) {
+		const canLock = 'requestPointerLock' in HTMLElement.prototype; // not on iOS
+		if (viaTouch || !canLock) {
 			touchMode = true;
-			document.documentElement.requestFullscreen?.({ navigationUI: 'hide' }).catch(() => {});
+			try {
+				// missing on iPhone; may not return a promise on older browsers
+				document.documentElement.requestFullscreen?.({ navigationUI: 'hide' })?.catch?.(() => {});
+			} catch {
+				/* fullscreen is a nice-to-have */
+			}
 		} else {
 			lock();
 		}
@@ -39,7 +50,7 @@
 	function exitTouchMode() {
 		touchMode = false;
 		Object.assign(touchInput, { moveX: 0, moveY: 0, lookX: 0, lookY: 0, jump: false, crouch: false });
-		if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+		if (document.fullscreenElement) document.exitFullscreen?.()?.catch?.(() => {});
 	}
 
 	const mb = (/** @type {number} */ b) => (b / 1e6).toFixed(1);
@@ -145,7 +156,10 @@
 					<div class="cs-progress-bar mb-3">
 						<div class="bars" style:width="{stats.total ? (100 * stats.loaded) / stats.total : 0}%"></div>
 					</div>
-					<button class="cs-btn" onclick={start}>{isTouch ? 'Tap' : 'Click'} to explore</button>
+					<button
+						class="cs-btn"
+						onpointerdown={(e) => (pressPointerType = e.pointerType)}
+						onclick={start}>{isTouch ? 'Tap' : 'Click'} to explore</button>
 				{/if}
 				<a class="cs-btn ml-2 inline-block" href={resolve('')}>Back</a>
 			</div>

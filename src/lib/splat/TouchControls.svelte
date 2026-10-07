@@ -23,7 +23,11 @@
 	function down(e) {
 		if (e.pointerType === 'mouse') return;
 		e.preventDefault();
-		/** @type {HTMLElement} */ (e.currentTarget).setPointerCapture(e.pointerId);
+		try {
+			/** @type {HTMLElement} */ (e.currentTarget).setPointerCapture(e.pointerId);
+		} catch {
+			/* capture is best-effort; moves still arrive on this full-screen layer */
+		}
 		if (!stick && e.clientX < window.innerWidth / 2) {
 			stick = { id: e.pointerId, ox: e.clientX, oy: e.clientY, kx: 0, ky: 0 };
 		} else if (lookId === null) {
