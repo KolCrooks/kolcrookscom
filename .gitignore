@@ -21,3 +21,6 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Raw splat captures (huge) - build web chunks with `yarn build:splat`
+*.ply

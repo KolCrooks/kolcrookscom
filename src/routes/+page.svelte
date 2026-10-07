@@ -68,6 +68,14 @@
                                 Blog
                             </button>
                         </form>
+                        <form action={resolve('room')}>
+                            <button
+                                class="cs-btn float-end z-20 relative cursor-none"
+                                type="submit"
+                            >
+                                Room
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <hr class="cs-hr" />
